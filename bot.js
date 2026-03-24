@@ -1,5 +1,5 @@
 const { Client, GatewayIntentBits } = require('discord.js');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 
 const client = new Client({
     intents: [
@@ -15,15 +15,20 @@ async function startAternosServer(message) {
     const statusMessage = await message.reply('⏳ Starting your Aternos server...');
     
     try {
-        // Connect to Browserless
         console.log('🔄 Connecting to Browserless...');
-        const BROWSER_WS_ENDPOINT = 'wss://chrome.browserless.io';
-        browser = await puppeteer.connect({
-            browserWSEndpoint: BROWSER_WS_ENDPOINT,
+        
+        // Use puppeteer-core with Browserless (v2 format)
+        const browser = await puppeteer.connect({
+            browserWSEndpoint: 'wss://chrome.browserless.io?token=2UCixdbOOb1QMwZe87f4bc404e3e40885f03dc24c4c01cc2d',
+            defaultViewport: null,
         });
+        
         console.log('✅ Browser connected!');
         
         const page = await browser.newPage();
+        
+        // Set a realistic user agent to avoid detection
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
         
         // Go to Aternos
         await page.goto('https://aternos.org/', { waitUntil: 'networkidle2', timeout: 60000 });
@@ -34,9 +39,10 @@ async function startAternosServer(message) {
             console.log('⚠️ Cloudflare challenge detected. Waiting...');
             await page.waitForFunction(
                 () => !document.title.includes('Just a moment'),
-                { timeout: 60000 }
+                { timeout: 90000 }
             );
             console.log('✅ Cloudflare passed!');
+            await page.waitForTimeout(2000);
         }
         
         // Login
@@ -49,10 +55,9 @@ async function startAternosServer(message) {
         // Go to servers page
         await page.goto('https://aternos.org/servers/', { waitUntil: 'networkidle2', timeout: 30000 });
         
-        // Select server
-        const serverName = process.env.ATERNOS_SERVER;
-        await page.waitForSelector(`a:contains("${serverName}")`, { timeout: 30000 });
-        await page.click(`a:contains("${serverName}")`);
+        // Click on your server
+        await page.waitForSelector('.server-list-item', { timeout: 30000 });
+        await page.click(`.server-list-item:has-text("${process.env.ATERNOS_SERVER}")`);
         
         // Click start button
         await page.waitForSelector('#start', { timeout: 30000 });
