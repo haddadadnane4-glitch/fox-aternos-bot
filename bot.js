@@ -13,9 +13,8 @@ async function startAternosServer(message) {
   try {
     statusMessage = await message.reply('⏳ Connecting to Aternos and starting the server...');
 
-    browser = await puppeteer.launch({
-      headless: false,
-      executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+browser = await puppeteer.launch({
+      headless: true,
       userDataDir: './puppeteer-profile',
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       defaultViewport: null
