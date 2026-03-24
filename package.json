@@ -1,10 +1,9 @@
 {
   "name": "fox-aternos-bot",
   "version": "1.0.0",
-  "description": "Discord bot for Aternos servers",
   "main": "bot.js",
   "dependencies": {
     "discord.js": "^14.14.1",
-    "puppeteer-core": "^22.0.0"
+    "puppeteer-core": "22.15.0"
   }
 }
