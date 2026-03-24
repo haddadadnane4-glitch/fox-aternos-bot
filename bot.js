@@ -41,7 +41,7 @@ console.log('✅ Browser connected!');
       const loginFrame = page.frames().find(f => f.url().includes('aternos'));
       if (!loginFrame) throw new Error('Login frame not found');
 
-      await loginFrame.waitForSelector('input#user', { timeout: 5000 });
+      await loginFrame.waitForSelector('input#user', { timeout: 30000 });
       await loginFrame.type('input#user', process.env.ATERNOS_USER, { delay: 50 });
       await loginFrame.type('input#password', process.env.ATERNOS_PASS, { delay: 50 });
       await loginFrame.click('button[type="submit"]');
