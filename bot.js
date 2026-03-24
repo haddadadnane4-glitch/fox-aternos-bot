@@ -13,11 +13,13 @@ async function startAternosServer(message) {
   try {
     statusMessage = await message.reply('⏳ Connecting to Aternos and starting the server...');
 
-browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      defaultViewport: null
-    });
+// Connect to public Browserless service
+const BROWSER_WS_ENDPOINT = 'wss://chrome.browserless.io';
+console.log('🔄 Connecting to Browserless...');
+browser = await puppeteer.connect({
+  browserWSEndpoint: BROWSER_WS_ENDPOINT,
+});
+console.log('✅ Browser connected!');
 
     const page = await browser.newPage();
     await page.setRequestInterception(true);
