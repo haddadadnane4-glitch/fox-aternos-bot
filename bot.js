@@ -55,7 +55,7 @@ console.log('✅ Browser connected!');
     await page.goto('https://aternos.org/servers/', { waitUntil: 'domcontentloaded', timeout: 60000 });
 
     const serverSelector = 'div.server-body';
-    await page.waitForSelector(serverSelector, { timeout: 15000 });
+    await page.waitForSelector(serverSelector, { timeout: 60000 });
     await page.click(serverSelector);
 
     await page.waitForSelector('#start', { timeout: 20000 });
