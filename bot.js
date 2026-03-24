@@ -17,7 +17,7 @@ async function startAternosServer(message) {
     try {
         // Connect to Browserless
         console.log('🔄 Connecting to Browserless...');
-        const BROWSER_WS_ENDPOINT = 'wss://production-sfo.browserless.io?token=2UCixdbOOb1QMwZe87f4bc404e3e40885f03dc24c4c01cc2d';
+        const BROWSER_WS_ENDPOINT = 'wss://production-sfo.browserless.io?token=2UCixdbOOb1QMwZe6923432f3a04287ee70ff28a0014822c8';
         browser = await puppeteer.connect({
             browserWSEndpoint: BROWSER_WS_ENDPOINT,
         });
