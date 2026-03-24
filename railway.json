@@ -1,5 +1,12 @@
 {
   "build": {
-    "builder": "NIXPACKS"
+    "builder": "NIXPACKS",
+    "nixpacksConfig": {
+      "setup": {
+        "nixPkgs": ["nodejs_20", "chromium"]
+      },
+      "install": "npm install --legacy-peer-deps",
+      "start": "node bot.js"
+    }
   }
 }
