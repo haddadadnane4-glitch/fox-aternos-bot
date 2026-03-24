@@ -17,9 +17,9 @@ async function startAternosServer(message) {
     try {
         console.log('🔄 Connecting to Browserless...');
         
-        // Use puppeteer-core with Browserless (v2 format)
-        const browser = await puppeteer.connect({
-            browserWSEndpoint: 'wss://chrome.browserless.io?token=2UCixdbOOb1QMwZe87f4bc404e3e40885f03dc24c4c01cc2d',
+        // Connect to Browserless
+        browser = await puppeteer.connect({
+            browserWSEndpoint: 'wss://chrome.browserless.io',
             defaultViewport: null,
         });
         
@@ -27,7 +27,7 @@ async function startAternosServer(message) {
         
         const page = await browser.newPage();
         
-        // Set a realistic user agent to avoid detection
+        // Set user agent to avoid detection
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
         
         // Go to Aternos
@@ -42,7 +42,6 @@ async function startAternosServer(message) {
                 { timeout: 90000 }
             );
             console.log('✅ Cloudflare passed!');
-            await page.waitForTimeout(2000);
         }
         
         // Login
