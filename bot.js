@@ -40,17 +40,31 @@ console.log('✅ Browser connected!');
     } else {
       const loginFrame = page.frames().find(f => f.url().includes('aternos'));
       if (!loginFrame) throw new Error('Login frame not found');
-      console.log('Current URL:', page.url());
+      // Debug: Check what page we're on
+console.log('Current URL:', page.url());
 console.log('Page title:', await page.title());
-      await page.screenshot({ path: 'debug.png', fullPage: true });
+
+// Handle Cloudflare "Just a moment..." page
+if (await page.title() === 'Just a moment...') {
+  console.log('⚠️ Cloudflare challenge detected. Waiting for it to pass...');
+  
+  // Wait for Cloudflare to redirect (up to 60 seconds)
+  await page.waitForFunction(
+    () => !document.title.includes('Just a moment'),
+    { timeout: 60000 }
+  );
+  
+  console.log('✅ Cloudflare challenge passed!');
+  console.log('New URL:', page.url());
+  console.log('New title:', await page.title());
+}
+
+// Take screenshot after Cloudflare passes
+await page.screenshot({ path: 'debug.png', fullPage: true });
 console.log('Screenshot saved');
 
-      await loginFrame.waitForSelector('input#user', { timeout: 30000 });
-      await loginFrame.type('input#user', process.env.ATERNOS_USER, { delay: 50 });
-      await loginFrame.type('input#password', process.env.ATERNOS_PASS, { delay: 50 });
-      await loginFrame.click('button[type="submit"]');
-      try {
-        await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 30000 });
+// Now try to find the username field
+await page.waitForSelector('input#user', { timeout: 30000 });
       } catch {
         console.log('⚠️ Login navigation timeout, continuing.');
       }
