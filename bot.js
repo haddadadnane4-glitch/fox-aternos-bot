@@ -30,7 +30,7 @@ console.log('✅ Browser connected!');
         req.continue();
       }
     });
-
+    
     await page.goto('https://aternos.org/go/', { waitUntil: 'domcontentloaded', timeout: 60000 });
 
     // Handle login or redirect
@@ -40,6 +40,10 @@ console.log('✅ Browser connected!');
     } else {
       const loginFrame = page.frames().find(f => f.url().includes('aternos'));
       if (!loginFrame) throw new Error('Login frame not found');
+      console.log('Current URL:', page.url());
+console.log('Page title:', await page.title());
+      await page.screenshot({ path: 'debug.png', fullPage: true });
+console.log('Screenshot saved');
 
       await loginFrame.waitForSelector('input#user', { timeout: 30000 });
       await loginFrame.type('input#user', process.env.ATERNOS_USER, { delay: 50 });
