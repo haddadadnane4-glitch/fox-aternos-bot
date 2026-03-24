@@ -73,31 +73,32 @@ await page.waitForSelector('input#user', { timeout: 30000 });
     await page.goto('https://aternos.org/servers/', { waitUntil: 'domcontentloaded', timeout: 60000 });
 
     const serverSelector = 'div.server-body';
-    await page.waitForSelector(serverSelector, { timeout: 60000 });
-    await page.click(serverSelector);
+        try {
+        await page.waitForSelector(serverSelector, { timeout: 10000 });
+        await page.click(serverSelector);
 
-    await page.waitForSelector('#start', { timeout: 20000 });
+        await page.waitForSelector('#start', { timeout: 10000 });
 
-    await handleGoogleVignette(page);
-    await clickStartButton(page);
-    await handleDialogs(page);
-    await handleAdStartPopup(page);
+        await handleGoogleVignette(page);
+        await clickStartButton(page);
+        await handleDialogs(page);
+        await handleAdStartPopup(page);
 
-    await delay(15000);
+        await delay(15000);
 
-    const info = await getServerInfo(page);
-    await statusMessage.edit(`✅ Server started!
-**Status:** ${info.status}
-**IP:** \`${info.ip}\`
-**Players:** ${info.players}
+        const info = await getServerInfo(page);
+        await statusMessage.edit(`Server started!  
+**Status:** ${info.status}  
+**IP:** ${info.ip}  
+**Players:** ${info.players}  
 **Version:** ${info.version}`);
-  } catch (err) {
-    console.error('Error starting Aternos server:', err);
-    if (statusMessage) await statusMessage.edit('❌ Failed to start Aternos server. Check logs for details.');
-  } finally {
-    if (browser) await browser.close();
-  }
-}
+
+    } catch (err) {
+        console.error('Error starting Aternos server:', err);
+        if (statusMessage) await statusMessage.edit('❌ Failed to start server');
+    } finally {
+        if (browser) await browser.close();
+               }
 
 async function handleGoogleVignette(page) {
   try {
