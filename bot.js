@@ -65,7 +65,7 @@ console.log('Screenshot saved');
 
 // Now try to find the username field
 await page.waitForSelector('input#user', { timeout: 30000 });
-      } catch {
+      } catch (err) {
         console.log('⚠️ Login navigation timeout, continuing.');
       }
     }
